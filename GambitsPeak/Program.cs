@@ -8,6 +8,7 @@ namespace GambitsPeak
 {
     class Program
     {
+        public static Player currentPlayer = new Player();
         static void Main(string[] args)
         {
             Start();
