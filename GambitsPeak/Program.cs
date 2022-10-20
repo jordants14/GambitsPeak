@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,8 @@ namespace GambitsPeak
             currentPlayer.name = Console.ReadLine();
             Console.Clear();
 
+            const string quote = "\"";
+
             if (currentPlayer.name == "")
                 Console.WriteLine("You must provide your name before you start your adventure. Please try again.");
             if (currentPlayer.name == "")
@@ -38,21 +41,27 @@ namespace GambitsPeak
             Console.Clear();
 
             Console.WriteLine(currentPlayer.name +"," + " it's the morning after your 18th birthday. Your father wakes you up before sunrise.");
-            Console.WriteLine("He tells you that when you turn 18, it's a village tradition to test your worth.");
-            Console.WriteLine("You must travel a dangerous path, up to Gambit's Peak to meet with King Stanislaus.");
-            Console.WriteLine("If you make the journey, you will be rewarded with a feast and riches.");
+            Console.ReadKey();
+            Console.Clear();
+            Console.WriteLine(quote + "You're 18 now, it's time you prove your worth as a warrior for the village." + quote);
+            Console.WriteLine(quote + "You must travel a dangerous path, up to Gambit's Peak to meet with King Stanislaus." + quote);
+            Console.WriteLine(quote + "If you survive the journey, you will be crowned a warrior of the village." + quote);
             Console.ReadKey();
             Console.Clear();
 
-            Console.WriteLine("Your father tells you to get dressed, and to meet him in the living room.");
-            Console.WriteLine("You get dressed and head to the living room.");
-            Console.WriteLine("Your father hands you a dagger and a map.");
+            Console.WriteLine(quote + "Get dressed, then meet me in the living room when you are ready to begin." + quote);
+            Console.WriteLine("Your father hands you a cloak and a rusty dagger.");
+            Console.WriteLine("Your father says, " + quote + "it's recommended that you scavenge for items along your journey." + quote);
+            Console.WriteLine(quote + "You may find potions while exploring. If you drink them, they will restore your wellbeing if you get hurt." + quote);
             Console.ReadKey();
             Console.Clear();
 
-            Console.WriteLine("Your father then explains that along your way, you will meet three different");
-            Console.WriteLine("Demonic strongholds' and that you will be met with resistance.");
-            Console.WriteLine("You head out the door and start the journey to Gambit's Peak.");
+            Console.WriteLine("Your father then explains that along your way, you will encounter obstacles in your path.");
+            Console.WriteLine("The pathway to Gambit's Peak is filled with citizens that have been cast out of the village.");
+            Console.WriteLine("Many of these citizens are criminals and may cause trouble when trying to pass.");
+            Console.ReadKey();
+            Console.Clear();
+            Console.WriteLine("Press any key to leave the village and begin the jounrey to Gambit's Peak.");
             Console.ReadKey();
             Console.Clear();
 
