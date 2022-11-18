@@ -42,7 +42,7 @@ namespace GambitsPeak
                 Console.WriteLine();
 
                 Console.WriteLine(" ======================");
-                Console.WriteLine("  " + p.name + "'s     ");
+                Console.WriteLine("       " + p.name + "'s     ");
                 Console.WriteLine("          Stats        ");
                 Console.WriteLine(" ~~~~~~~~~~~~~~~~~~~~~~");
                 Console.WriteLine("  Coins: " +p.coins);
@@ -56,6 +56,7 @@ namespace GambitsPeak
 
                 Console.WriteLine(" =====================");
                 Console.WriteLine(" ~~~~ (E)xit Shop ~~~~");
+                Console.WriteLine(" ~~~~ (Q)uit Game ~~~~");
                 Console.WriteLine(" =====================");
                 Console.WriteLine();
 
@@ -76,6 +77,10 @@ namespace GambitsPeak
                 else if (input == "d" || input == "difficulty mod")
                 {
                     AttemptBuy("difficulty mod", difficultyPrice, p);
+                }
+                else if(input == "q" || input == "quit")
+                {
+                    Program.Quit();
                 }
                 else if (input == "e" || input == "exit")
                     break;

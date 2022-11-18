@@ -6,26 +6,42 @@ using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
 
 namespace GambitsPeak
 {
+    [Serializable]
     public class Program
     {
         public static Player currentPlayer = new Player();
         public static bool primaryLoop = true;
+        public static Random rnd = new Random();
         static void Main(string[] args)
         {
-            Start();
-            Encounters.FirstEncounter(); // Viscount Fight
-            FirstRandomEncounter(); // Random Encounter Dialogue Storyline
-            Encounters.BasicFight(); // Assigning Random stats/Enemy
-            FirstSerloEncounter(); // Serlo Fight Storyline
-            Encounters.SerloEncounter(); // Serlo Fight
+            if(!Directory.Exists("saves"))
+            {
+                Directory.CreateDirectory("saves");
+            }
+            currentPlayer = Load(out bool newP);
+            if (newP)
+                Encounters.FirstEncounter();
+            while (primaryLoop)
+            {
+                FirstRandomEncounter(); // Random Encounter Dialogue Storyline
+                Encounters.BasicFight(); // Assigning Random stats/Enemy
+                FirstSerloEncounter(); // Serlo Fight Storyline
+                Encounters.SerloEncounter(); // Serlo Fight
+                Encounters.BasicFight(); // Assigning Random stats/Enemy
+            }
         }
 
 
-        static void Start()
+        static Player NewStart(int i)
         {
+            Console.Clear();
+            Player p = new Player();
             Console.WriteLine("Welcome to Gambit's Peak. This is a text based adventure game created by Jordan Smith.");
             Console.WriteLine("");
             Console.WriteLine("This project is a work in progress. I am focusing on the coding more than the story for now.");
@@ -35,19 +51,20 @@ namespace GambitsPeak
             Console.Clear();
 
             Console.WriteLine("Please enter your character's name:");
-            currentPlayer.name = Console.ReadLine();
+            p.name = Console.ReadLine();
+            p.saveId = i; // sets unique player ID.
             Console.Clear();
 
             const string quote = "\"";
 
-            if (currentPlayer.name == "")
+            if (p.name == "")
                 Console.WriteLine("You must provide your character name before you start your adventure. Please try again.");
-            if (currentPlayer.name == "")
+            if (p.name == "")
                 Console.ReadKey();
-            if (currentPlayer.name == "")
+            if (p.name == "")
                 Environment.Exit(0);
             else
-                Console.WriteLine("Welcome to the adventure " + currentPlayer.name + ".");
+                Console.WriteLine("Welcome to the adventure " + p.name + ".");
             Console.ReadKey();
             Console.Clear();
 
@@ -75,7 +92,7 @@ namespace GambitsPeak
             Console.Clear();
 
             Console.WriteLine(quote + "I didn't think you was ever going to wake up! My name is Urazin. I am the wizard of Scovel.");
-            Console.WriteLine("I think I have seen you around the village. Your name is, " + currentPlayer.name + ".");
+            Console.WriteLine("I think I have seen you around the village. Your name is, " + p.name + ".");
             Console.ReadKey();
             Console.Clear();
 
@@ -95,7 +112,7 @@ namespace GambitsPeak
             Console.ReadKey();
             Console.Clear();
 
-            Console.WriteLine(quote + "Everyone in the village knows you " + currentPlayer.name + ". There is a rumor that you are going to kill King Azori?");
+            Console.WriteLine(quote + "Everyone in the village knows you " + p.name + ". There is a rumor that you are going to kill King Azori?");
             Console.WriteLine("");
             Console.WriteLine("Is that true? It seems a bit crazy to me.... However, I can see why someone would want to assassinate the king.");
             Console.WriteLine("");
@@ -164,7 +181,104 @@ namespace GambitsPeak
             Console.WriteLine("The guy begins to sprint towards you screaming and slinging the axe around.");
             Console.WriteLine("");
             Console.WriteLine(quote + "I'M Viscount, YOU PICKED THE WRONG CAMP TO STEAL FROM. I WILL HAVE YOUR HEAD!" + quote);
-            Console.ReadKey();
+            return p;
+        }
+
+        public static void Quit()
+        {
+            Save();
+            Environment.Exit(0);
+        }
+
+        public static void Save()
+        {
+            BinaryFormatter binForm = new BinaryFormatter();
+            string path = "saves/" +currentPlayer.saveId.ToString() + ".level";
+            FileStream file = File.Open(path, FileMode.OpenOrCreate);
+            binForm.Serialize(file, currentPlayer);
+            file.Close();
+        }
+
+        public static Player Load(out bool newP)
+        {
+            newP = false;
+            Console.Clear();
+            string[] paths = Directory.GetFiles("saves");
+            List<Player> players = new List<Player>();
+            int idCount = 0;
+
+            BinaryFormatter binForm = new BinaryFormatter();
+            foreach (string p in paths)
+            {
+                FileStream file = File.Open(p, FileMode.Open);
+                Player player = (Player)binForm.Deserialize(file);
+                file.Close();
+                players.Add(player);
+            }
+
+            idCount = players.Count;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Returning Player? Input your player name or player ID. (id:# or playername).");
+                Console.WriteLine();
+
+                foreach (Player p in players)
+                {
+                    Console.WriteLine(p.saveId + ": " + p.name + ", Coins: " + p.coins + ", Health: " + p.health);
+                }
+                Console.WriteLine("New players can type 'create' to start a new save file.");
+                string[] data = Console.ReadLine().Split(':');
+
+                try
+                {
+                    if (data[0] == "id")
+                    {
+                        if(int.TryParse(data[1], out int id))
+                        {
+                            foreach (Player player in players)
+                            {
+                                if(player.saveId == id)
+                                {
+                                    return player;
+                                }
+                            }
+                            Console.WriteLine("Invalid player ID, try again.");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Your id needs to be a number. Press any key to continue.");
+                            Console.ReadKey();
+                        }
+                    }
+                    else if (data[0] == "create")
+                    {
+                        Player newPlayer = NewStart(idCount);
+                        newP = true;
+                        return newPlayer;
+                    }
+                    else
+                    {
+                        foreach(Player player in players)
+                        {
+                            if(player.name == data[0])
+                            {
+                                return player;
+                            }
+                        }
+                        Console.WriteLine("Playername is invalid. Try again. Press any key to continue.");
+                        Console.ReadKey();
+                    }
+                }
+                catch(IndexOutOfRangeException)
+                {
+                    Console.WriteLine("Your id needs to be a number. Press any key to continue.");
+                    Console.ReadKey();
+                }
+            }
+
         }
         static void FirstRandomEncounter()
         {
