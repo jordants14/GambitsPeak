@@ -9,24 +9,26 @@ using System.Threading.Tasks;
 
 namespace GambitsPeak
 {
-    class Program
+    public class Program
     {
         public static Player currentPlayer = new Player();
         public static bool primaryLoop = true;
         static void Main(string[] args)
         {
             Start();
-            Encounters.FirstEncounter();
-            while(primaryLoop)
-            {
-                Encounters.RandomEncounter();
-            }
+            Encounters.FirstEncounter(); // Viscount Fight
+            FirstRandomEncounter(); // Random Encounter Dialogue Storyline
+            Encounters.BasicFight(); // Assigning Random stats/Enemy
+            FirstSerloEncounter(); // Serlo Fight Storyline
+            Encounters.SerloEncounter(); // Serlo Fight
         }
 
 
         static void Start()
         {
             Console.WriteLine("Welcome to Gambit's Peak. This is a text based adventure game created by Jordan Smith.");
+            Console.WriteLine("");
+            Console.WriteLine("This project is a work in progress. I am focusing on the coding more than the story for now.");
             Console.WriteLine("");
             Console.WriteLine("Press any key to continue.");
             Console.ReadKey();
@@ -101,7 +103,7 @@ namespace GambitsPeak
             Console.ReadKey();
             Console.Clear();
 
-            Console.WriteLine("You think to yourself, " + quote + "If this old man knows my plans, I wonder who else knows?" +quote);
+            Console.WriteLine("You think to yourself, " + quote + "If this old man knows my plans, I wonder who else knows?" + quote);
             Console.WriteLine("");
             Console.WriteLine(quote + "You're right, sorry to be so harsh on you. I trust you. And yes, I, have been sent to Enders Peak by the enders to");
             Console.WriteLine("put a stop to the corrupted King, Azori. He has threatened and starved this village for too long." + quote);
@@ -161,8 +163,48 @@ namespace GambitsPeak
             Console.WriteLine("");
             Console.WriteLine("The guy begins to sprint towards you screaming and slinging the axe around.");
             Console.WriteLine("");
-            Console.WriteLine(quote + "I'M LAVASKE, YOU PICKED THE WRONG CAMP TO STEAL FROM. I WILL HAVE YOUR HEAD!" + quote);
+            Console.WriteLine(quote + "I'M Viscount, YOU PICKED THE WRONG CAMP TO STEAL FROM. I WILL HAVE YOUR HEAD!" + quote);
             Console.ReadKey();
+        }
+        static void FirstRandomEncounter()
+        {
+            const string quote = "\"";
+            Console.Clear();
+            Console.WriteLine("After your interaction with Viscount, you leave the camp");
+            Console.WriteLine("and return to Gambit's path. You eventually reach a part of");
+            Console.WriteLine("the path where a bridge has collapsed and a river is between you");
+            Console.WriteLine("and the other side. You decide to walk down towards the river to");
+            Console.WriteLine("check for a shallow spot to step across. You head down a small hill");
+            Console.WriteLine("and find a part of the river that is shallow enough to cross.");
+            Console.ReadKey();
+            Console.Clear();
+
+            Console.WriteLine("As you get to the bottom of the hill near the river, you see something run towards you from the corner of your eye!");
+            Console.ReadKey();
+            Console.Clear();
+        }
+        static void FirstSerloEncounter()
+        {
+            const string quote = "\"";
+            Console.Clear();
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine(quote + "Ah, it's funny that we meet. I've been looking for you... My name is Serlo. King Azori knows you plan and I am here to stop you.");
         }
     }
 }

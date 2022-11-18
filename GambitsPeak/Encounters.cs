@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GambitsPeak
 {
-    class Encounters
+    public class Encounters
     {
         //Makes quoting text easier to remember
         const string quote = "\"";
@@ -26,7 +26,7 @@ namespace GambitsPeak
             Console.WriteLine("");
             Console.WriteLine("");
             Console.ReadKey();
-            Combat(false, "Lavaske", 1, 4);
+            Combat(false, "Viscount", 1, 4);
         }
         public static void BasicFight()
         {
@@ -35,30 +35,28 @@ namespace GambitsPeak
             Console.ReadKey();
             Combat(true, "",0,0);
         }
-        public static void MelvorskiEncounter()
+        public static void SerloEncounter()
         {
-            Console.Clear();
-            Console.WriteLine(quote + "Ah, it's funny that we meet. I've been looking for you... My name is Melvorski. King Azori knows you plan and I am here to stop you.");
             Console.WriteLine("");
-            Console.WriteLine("It's time to fight Melvorski");
+            Console.WriteLine("");
             Console.ReadKey();
-            Combat(false, "Melvorski", 3, 2);
+            Combat(false, "Serlo", 2, 5);
         }
 
 
         //Encounter Tools
-        public static void RandomEncounter()
-        {
-            switch(rand.Next(0,2))
-            {
-                case 0:
-                    BasicFight();
-                    break;
-                case 1:
-                    MelvorskiEncounter();
-                    break;
-            }
-        }
+        //public static void RandomEncounter()
+        //{
+        //    switch(rand.Next(0,2))
+        //    {
+        //       case 0:
+        //            BasicFight();
+        //            break;
+        //        case 1:
+        //            SerloEncounter();
+        //            break;
+        //    }
+        //}
 
         public static void Combat(bool random, string name, int power, int health)
         {
@@ -66,12 +64,12 @@ namespace GambitsPeak
             int p = 0;
             int h = 0;
 
-            //random for name, power, and health.
+            //Settings for generating enemy name, power level, and health values.
             if (random)
             {
                 n = GetName();
-                p = rand.Next(1, 4);
-                h = rand.Next(1, 8);
+                p = Program.currentPlayer.GetEnemyPower();
+                h = Program.currentPlayer.GetEnemyHealth();
             }
             else
             {
@@ -91,17 +89,13 @@ namespace GambitsPeak
                 Console.WriteLine("");
 
                 //Encounter Controls GUI
-                Console.WriteLine("█░█ ▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀ █░█");
-                Console.WriteLine("░░░ ▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀ ░░░");
-                Console.WriteLine("");
-                Console.WriteLine("█░█   ▄▀ ▄▀█ ▀▄ ▀█▀ ▀█▀ ▄▀█ █▀▀ █▄▀   ▄▀ █▀▄ ▀▄ █▀▀ █▀▀ █▀▀ █▄░█ █▀▄   █░█");
-                Console.WriteLine("░░░   ▀▄ █▀█ ▄▀ ░█░ ░█░ █▀█ █▄▄ █░█   ▀▄ █▄▀ ▄▀ ██▄ █▀░ ██▄ █░▀█ █▄▀   ░░░");
-                Console.WriteLine("");
-                Console.WriteLine("█░█       ▄▀ █▀█ ▀▄ █░█ █▄░█       ▄▀ █░█ ▀▄ █▀▀ ▄▀█ █░░               █░█");
-                Console.WriteLine("░░░       ▀▄ █▀▄ ▄▀ █▄█ █░▀█       ▀▄ █▀█ ▄▀ ██▄ █▀█ █▄▄               ░░░");
-                Console.WriteLine("");
-                Console.WriteLine("█░█ ▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀  ▀ █░█");
-                Console.WriteLine("░░░ ▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀ ▀▀  ▀ ░░░");
+                Console.WriteLine(" =======================");
+                Console.WriteLine(" ~~~~~~~~~~~~~~~~~~~~~~~");
+                Console.WriteLine("   (A) ttack (D) efend  ");
+                Console.WriteLine("    (R) un    (H) eal   ");
+                Console.WriteLine(" ~~~~~~~~~~~~~~~~~~~~~~~");
+                Console.WriteLine(" =======================");
+                Console.WriteLine();
                 Console.WriteLine("Controls: ");
                 Console.WriteLine("Press " + quote + "A" + quote + " for attack,  " + quote + "D" + quote + " for defend, " + quote + "R" + quote + " for run,  " + quote + "H" + quote + " for heal. Then hit the " + quote + "Enter key." + quote);
 
@@ -115,7 +109,7 @@ namespace GambitsPeak
                 //Check invalid input incase user is confused with the text-based encounter GUI system.
                 if (String.IsNullOrEmpty(input))
                 {
-                    Console.WriteLine("Invalid Input. Please review the controls and try again. Press " + quote + "Enter" + quote + "to continue.");
+                    Console.WriteLine("Invalid Input. Please review the controls and try again. Press " + quote + "Enter" + quote + " to continue.");
                     Console.ReadKey();
                 }
                 else if (input.ToLower() == "a" || input.ToLower() == "attack")
@@ -172,9 +166,16 @@ namespace GambitsPeak
                     else
                     {
                         Console.WriteLine();
-                        Console.WriteLine("You manage to stun the " + n + "with your weapon and make an escape.");
+                        Console.WriteLine("You manage to stun " + n + " with your weapon and make an escape.");
+                        Console.Clear();
+                        Console.WriteLine("");
+                        Console.WriteLine("You get away from " + n + " and you find the nearest shop. Check it out!");
                         Console.ReadKey();
-                        //go to store
+
+                        //Load into shop menu
+                        Console.Clear();
+                        Console.WriteLine("You run away and find the nearest shop. Check it out!");
+                        Shop.LoadShop(Program.currentPlayer);
                     }
                 }
                 else if (input.ToLower() == "h" || input.ToLower() == "heal")
@@ -223,7 +224,7 @@ namespace GambitsPeak
                 }
                 Console.ReadKey();
             }
-            int c = rand.Next(10, 50);
+            int c = Program.currentPlayer.GetCoins();
             Console.WriteLine();
             Console.WriteLine("You have slain the "+n+". You then proceed to loot their body and find "+c+" gold coins!");
             Program.currentPlayer.coins += c;
